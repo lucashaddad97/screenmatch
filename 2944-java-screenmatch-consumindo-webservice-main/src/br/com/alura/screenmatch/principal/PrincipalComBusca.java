@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.principal;
 
+import br.com.alura.screenmatch.exceçao.ErroDeConversaoDeAnoException;
 import br.com.alura.screenmatch.modelos.Titulo;
 import br.com.alura.screenmatch.modelos.TituloOmdb;
 import com.google.gson.FieldNamingPolicy;
@@ -18,7 +19,8 @@ public class PrincipalComBusca {
         Scanner leitura = new Scanner(System.in);
         System.out.println("Digite filme para busca: ");
         var busca = leitura.nextLine();
-        String endereco = "https://www.omdbapi.com/?i=" + busca +"&apikey=d38c455f" ;
+        String endereco = "https://www.omdbapi.com/?t=" + busca.replace(" ", "+") +"&apikey=d38c455f" ;
+        try{
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -26,16 +28,26 @@ public class PrincipalComBusca {
                 .build();
         HttpResponse<String> response = client
                 .send(request,HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+//        System.out.println(response.body());
 
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
 //        Titulo meutitulo = gson.fromJson(response.body(), Titulo.class);
         TituloOmdb meuTituloOmdb = gson.fromJson(response.body(), TituloOmdb.class);
-        System.out.println(meuTituloOmdb);
-        Titulo meuTitulo = new Titulo(meuTituloOmdb);
-        System.out.println(meuTitulo);
+      System.out.println(meuTituloOmdb);
+//        try{
+            Titulo meuTitulo = new Titulo(meuTituloOmdb);
+            System.out.println(meuTitulo);
+        } catch (NumberFormatException e) {
+            System.out.println("Erro ao buscar Titulo Omdb");
+            System.out.println(e.getMessage());;
+        }catch (ErroDeConversaoDeAnoException e){
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Programa finailizou correto");
+
 
 
     }
