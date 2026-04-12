@@ -1,6 +1,5 @@
 package br.com.alura.screenmatch.desafio;
 
-import br.com.alura.screenmatch.exceçao.ErroDeConversaoDeAnoException;
 
 import java.util.Scanner;
 
@@ -13,7 +12,7 @@ public class Divisores {
             System.out.print("Digite o denominador: ");
             int denominador = leitura.nextInt();
             if (denominador == 0) {
-                throw new ErroDeConversaoDeAnoException("Nao da pra dividir por zero");
+                throw new RuntimeException("deve ser um valor diferente de zero");
             }
             int resultado = numerador / denominador;
             System.out.println(denominador + "/" + numerador + " = " + resultado);
